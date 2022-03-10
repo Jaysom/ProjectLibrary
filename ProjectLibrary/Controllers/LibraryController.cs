@@ -20,5 +20,12 @@ namespace ProjectLibrary.Controllers
 
         [HttpGet(Name = "/book/{id}")]
         public Book GetBookByItemId(int id) => _libraryService.GetBookById(id);
+
+        [HttpPut(Name = "book/{book}")]
+        public List<Book> UpdateBook(Book book) => _libraryService.UpdateBook(book);
+
+
+        [HttpPost(Name = "delete/{id}")]
+        public List<Book> DeleteBook(int id) => _libraryService.DeleteBook(id);
     }
 }

@@ -8,6 +8,6 @@
         public string Author { get; set; }
         public double Price { get; set; }
         public string[] Terms { get; set; }
-        public int[] Related { get; set; }
+        public int[]? Related { get; set; }
     }
 }

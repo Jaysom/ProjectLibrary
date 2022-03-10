@@ -7,5 +7,9 @@ namespace ProjectLibrary.Services.Interfaces
         List<Item> GetItemCollection();
 
         Book GetBookById(int id);
+
+        List<Book> UpdateBook(Book book);
+
+        List<Book> DeleteBook(int id);
     }
 }
