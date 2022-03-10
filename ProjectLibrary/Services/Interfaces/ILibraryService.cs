@@ -8,8 +8,8 @@ namespace ProjectLibrary.Services.Interfaces
 
         Book GetBookById(int id);
 
-        List<Book> UpdateBook(Book book);
+        Task UpdateBook(Book book);
 
-        List<Book> DeleteBook(int id);
+        void DeleteBook(int id);
     }
 }

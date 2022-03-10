@@ -6,36 +6,60 @@ namespace ProjectLibrary.Services.Implementations
 {
     public class LibraryService : ILibraryService
     {
-        private List<Book> Books { get; set; }
+        private readonly ApplicationDBContext _dbContext;
 
-        public LibraryService()
+        public LibraryService(ApplicationDBContext dBContext)
         {
-            Books = new Library().Books;
+            _dbContext = dBContext;
         }
 
         public List<Item> GetItemCollection()
         {
-            return Books.Select(b => new Item() { Id = b.Id, Price = b.Price, Related = b.Related, Title = b.Title }).ToList();
+            return _dbContext.Books.Select(b => new Item() { Id = b.Id, Price = b.Price, Related = new int[] { b.Related }, Title = b.Title, }).ToList();
         }
 
         public Book GetBookById(int id)
         {
-            return Books.FirstOrDefault(b => b.Id == id);
+            try
+            {
+                return _dbContext.Books.FirstOrDefault(b => b.Id == id);
+            }
+            catch (Exception ex)
+            {
+                
+                throw ex;
+            }
+            
         }
 
-        public List<Book> UpdateBook(Book book)
+        public async Task UpdateBook(Book book)
         {
-            var index = Books.FindIndex(a => a.Id == book.Id);
-            Books[index] = book;
+            try
+            {
+                _dbContext.Update(book);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
 
-            return Books;
+                throw ex;
+            }
+            
         }
 
-        public List<Book> DeleteBook(int id)
+        public async Task DeleteBook(int id)
         {
-            Books.Remove(GetBookById(id));
+            try
+            {
+                _dbContext.Books.Remove(GetBookById(id));
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
 
-            return Books;
+                throw ex;
+            }
+            
         }
 
     }

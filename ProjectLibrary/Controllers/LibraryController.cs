@@ -4,28 +4,72 @@ using ProjectLibrary.Services.Interfaces;
 
 namespace ProjectLibrary.Controllers
 {
-    [Route("api/library/[action]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class LibraryController : ControllerBase
     {
         private ILibraryService _libraryService;
+        private ILogger<LibraryController> _logger;
 
-        public LibraryController(ILibraryService libraryService)
+        public LibraryController(ILibraryService libraryService, ILogger<LibraryController> logger)
         {
             _libraryService = libraryService;
+            _logger = logger;
         }
 
-        [HttpGet(Name = "/items")]
+        [HttpGet("items")]
         public List<Item> GetAllItems() => _libraryService.GetItemCollection();
 
-        [HttpGet(Name = "/book/{id}")]
-        public Book GetBookByItemId(int id) => _libraryService.GetBookById(id);
 
-        [HttpPut(Name = "book/{book}")]
-        public List<Book> UpdateBook(Book book) => _libraryService.UpdateBook(book);
+        [HttpGet("book/{id}")]
+        public Book GetBookByItemId(int id)
+        {
+            try
+            {
+                if (_libraryService.GetBookById(id) == null)
+                {
+                    _logger.LogInformation($"No book was found with the Id: {id}");
+                }
+                
+                return _libraryService.GetBookById(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+
+                return null;
+            }
+        }
 
 
-        [HttpPost(Name = "delete/{id}")]
-        public List<Book> DeleteBook(int id) => _libraryService.DeleteBook(id);
+
+        [HttpPut("book/{book}")]
+        public async Task UpdateBook(Book book)
+        {
+            try
+            {
+                await _libraryService.UpdateBook(book);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+            
+        }
+
+
+        [HttpPost("delete/{id}")]
+        public void DeleteBook(int id)
+        {
+            try
+            {
+                _libraryService.DeleteBook(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+            }
+        } 
     }
 }
