@@ -10,6 +10,6 @@ namespace ProjectLibrary.Services.Interfaces
 
         Task UpdateBook(Book book);
 
-        void DeleteBook(int id);
+        Task DeleteBook(int id);
     }
 }

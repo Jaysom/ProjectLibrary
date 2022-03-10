@@ -27,7 +27,7 @@ namespace ProjectLibrary.Services.Implementations
             catch (Exception ex)
             {
                 
-                throw ex;
+             return null; ;
             }
             
         }
